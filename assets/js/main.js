@@ -47,10 +47,30 @@ document.addEventListener('click', function (e) {
 
   if (el.classList.contains('delete')) {
     el.parentElement.remove()
+    saveTarefas()
   }
 })
 
 function saveTarefas() {
-  const liTarefas = document.querySelectorAll('.tarefas')
-  console.log(liTarefas)
+  const liTarefas = tarefas.querySelectorAll('li')
+  const listTarefas = []
+
+  for (let tarefa of liTarefas) {
+    let tarefaText = tarefa.innerText
+    tarefaText = tarefaText.replace('Apagar', '').trim() //removement text the button Apagar and trim() remove the space
+    listTarefas.push(tarefaText)
+  }
+
+  const tarefasJSON = JSON.stringify(listTarefas) //Convert a element JavaScript to JSON
+  localStorage.setItem('tarefas', tarefasJSON)
 }
+
+function addTarefasSave() {
+  const tarefas = localStorage.getItem('tarefas')
+  const listTarefas = JSON.parse(tarefas) //Convert a object javascript
+
+  for (let tarefa of listTarefas) {
+    criaTarefa(tarefa)
+  }
+}
+addTarefasSave()
